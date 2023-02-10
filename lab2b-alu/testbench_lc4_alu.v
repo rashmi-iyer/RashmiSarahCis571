@@ -140,7 +140,7 @@ module test_alu;
       // *** ALU TESTING ***
       // *******************
       
-      /*lineno = 0;
+      lineno = 0;
       // read in the ALU input trace one line at a time
       while (5 == $fscanf(aluInFile, "%b %b %b %b %b", insn, pc, r1data, r2data, expectedALUResult)) begin
          #2; // wait for inputs to propagate through ALU
@@ -176,7 +176,7 @@ module test_alu;
          end
          
          #2;
-      end // end while */
+      end // end while 
       
       // cleanup
       if (gpInFile)  $fclose(gpInFile);
