@@ -81,8 +81,8 @@ module lc4_processor
    wire is_branch;
    wire is_control_insn;
    lc4_decoder decoder(.insn(i_cur_insn), .r1sel(r1sel), .r1re(r1re), .r2sel(r2sel), .r2re(r2re), 
-      .wsel(rdsel), .regfile_we(regfile_we), .nzp_we(nzp_we), .select_pc_plus_one(.select_pc_plus_one),
-      .is_load(is_load), .is_store(is_store), .is_branch(is_branch), .is_control_insn(.is_control_insn));
+      .wsel(rdsel), .regfile_we(regfile_we), .nzp_we(nzp_we), .select_pc_plus_one(select_pc_plus_one),
+      .is_load(is_load), .is_store(is_store), .is_branch(is_branch), .is_control_insn(is_control_insn));
 
    wire[15:0] o_rs_data;
    wire[15:0] o_rt_data;
@@ -100,19 +100,21 @@ module lc4_processor
 
    assign test_nzp_we = nzp_we;
 
-   assign[2:0] nzp_towrite;
+   wire[2:0] nzp_towrite;
+   wire[2:0] nzp_out;
    Nbit_reg #(3, 3'b0) nzp_reg (.in(nzp_towrite), .out(nzp_out), .clk(clk), .we(nzp_we), .gwe(gwe), .rst(rst));
 
    assign nzp_towrite[2] = $signed(rd_write_val) < 0;
-   assign nzp_towrite[1] = $signed(rd_write_val) = 0;
+   assign nzp_towrite[1] = $signed(rd_write_val) == 0;
    assign nzp_towrite[0] = $signed(rd_write_val) > 0;
 
    wire[15:0] pc_plus_one;
-   cla16 pc_cla(.a(pc), .b(16'b1), .cin(1'b0), .out(pc_plus_one));
+   cla16 pc_cla(.a(pc), .b(16'b1), .cin(1'b0), .sum(pc_plus_one));
 
    wire[15:0] rd_write_val;
    assign rd_write_val = select_pc_plus_one ? pc_plus_one : (is_load ? i_cur_dmem_data : alu_out);
 
+   wire branch_true;
    assign next_pc = ((is_branch & branch_true) | is_control_insn) ? alu_out : pc_plus_one;
 
    assign branch_true = (i_cur_insn[11:9] & nzp_out) != 0;
@@ -128,7 +130,7 @@ module lc4_processor
    assign test_nzp_new_bits = nzp_towrite;
    assign test_dmem_we = o_dmem_we;
    assign test_dmem_addr = o_dmem_addr;
-   assign test_dmem_data = is_load ? i_cur_dmem_data : o_dmem_towrite;
+   assign test_dmem_data = is_load ? i_cur_dmem_data : (is_store ? o_dmem_towrite: 16'b0);
 
    /* Add $display(...) calls in the always block below to
     * print out debug information at the end of every cycle.
