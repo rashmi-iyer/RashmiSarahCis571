@@ -41,15 +41,18 @@ module lc4_processor
 
    wire [15:0] pc;
    wire [15:0] next_pc;
-   assign next_pc = load_to_use_stall ? pc : pc_plus_one;
-   // update this for 4b
+   assign next_pc = take_branch ? x_aluout : (load_to_use_stall ? pc : pc_plus_one);
+
    Nbit_reg #(16, 16'h8200) f_pc_reg (.in(next_pc), .out(pc), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
 
    // code to fetch here
    wire [15:0] d_pc;
    wire [15:0] d_insn;
-   Nbit_reg #(16, 16'h8200) d_pc_reg (.in(pc), .out(d_pc), .clk(clk), .we(!load_to_use_stall), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) d_insn_reg (.in(i_cur_insn), .out(d_insn), .clk(clk), .we(!load_to_use_stall), .gwe(gwe), .rst(rst));
+   wire [15:0] d_pc_plus_one;
+   Nbit_reg #(16, 16'h8200) d_pc_reg (.in(take_branch ? 16'b0 : pc), .out(d_pc), .clk(clk), .we(!load_to_use_stall), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'b0) d_insn_reg (.in(take_branch ? 16'b0 : i_cur_insn), .out(d_insn), .clk(clk), .we(!load_to_use_stall), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'b0) d_pc_plus_one_reg (.in(take_branch ? 16'b0 : pc_plus_one), .out(d_pc_plus_one), .clk(clk), .we(!load_to_use_stall), .gwe(gwe), .rst(rst));
+
 
    //code to decode here
    wire [17:0] d_decode_output;
@@ -60,8 +63,10 @@ module lc4_processor
    wire [17:0] x_decodevals;
    wire [15:0] x_r1val;
    wire [15:0] x_r2val;
+   wire [15:0] x_pc_plus_one;
    wire load_to_use_stall = x_decodevals[14] & ((d_decode_output[3] & (d_decode_output[2:0] == x_decodevals[10:8])) | 
-                           (d_decode_output[7] & d_decode_output[6:4] == x_decodevals[10:8] & !d_decode_output[15]));
+                           (d_decode_output[7] & d_decode_output[6:4] == x_decodevals[10:8] & !d_decode_output[15]) |
+                           d_decode_output[16]);
 
    lc4_decoder decoder(.insn(d_insn), .r1sel(d_decode_output[2:0]), .r1re(d_decode_output[3]), .r2sel(d_decode_output[6:4]), .r2re(d_decode_output[7]), 
       .wsel(d_decode_output[10:8]), .regfile_we(d_decode_output[11]), .nzp_we(d_decode_output[12]), .select_pc_plus_one(d_decode_output[13]),
@@ -78,11 +83,12 @@ module lc4_processor
    assign d_actual_r2val = (d_decode_output[7] & w_decodevals[10:8] == d_decode_output[6:4] & w_decodevals[11]) ?
                            w_rd_write_val : d_r2val_output;
 
-   Nbit_reg #(16, 16'h8200) x_pc_reg (.in(load_to_use_stall ? 16'b0 : d_pc), .out(x_pc), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) x_insn_reg (.in(load_to_use_stall ? 16'b1 : d_insn), .out(x_insn), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(18, 18'b0) x_decodevals_reg (.in(load_to_use_stall ? 18'b0 : d_decode_output), .out(x_decodevals), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) x_r1val_reg (.in(load_to_use_stall ? 16'b0 : d_actual_r1val), .out(x_r1val), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) x_r2val_reg (.in(load_to_use_stall ? 16'b0 : d_actual_r2val), .out(x_r2val), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h8200) x_pc_reg (.in((load_to_use_stall | take_branch) ? 16'b0 : d_pc), .out(x_pc), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'b0) x_insn_reg (.in(take_branch ? 16'b0 : (load_to_use_stall ? 16'b1 : d_insn)), .out(x_insn), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(18, 18'b0) x_decodevals_reg (.in((take_branch | load_to_use_stall) ? 18'b0 : d_decode_output), .out(x_decodevals), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'b0) x_r1val_reg (.in((take_branch | load_to_use_stall) ? 16'b0 : d_actual_r1val), .out(x_r1val), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'b0) x_r2val_reg (.in((take_branch | load_to_use_stall) ? 16'b0 : d_actual_r2val), .out(x_r2val), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'b0) x_pc_plus_one_reg (.in((take_branch | load_to_use_stall) ? 16'b0 : d_pc_plus_one), .out(x_pc_plus_one), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
 
    //code to execute here
 
@@ -93,9 +99,9 @@ module lc4_processor
    wire [15:0] m_r1val;
    wire [15:0] m_r2val;
    wire [15:0] m_aluout;
-
    wire [15:0] x_actual_r1val;
    wire [15:0] x_actual_r2val;
+   wire [15:0] m_pc_plus_one;
    assign x_actual_r1val = (x_decodevals[3] & !m_decodevals[14] & m_decodevals[10:8] == x_decodevals[2:0] & m_decodevals[11]) ?
                            m_aluout : ((x_decodevals[3] & w_decodevals[10:8] == x_decodevals[2:0] & w_decodevals[11]) ?
                            w_rd_write_val : x_r1val);
@@ -106,12 +112,16 @@ module lc4_processor
 
    lc4_alu alu(.i_insn(x_insn), .i_pc(x_pc), .i_r1data(x_actual_r1val), .i_r2data(x_actual_r2val), .o_result(x_aluout));
 
+   wire take_branch;
+   assign take_branch = (x_decodevals[16] & ((x_insn[11:9] & (m_decodevals[12] ? nzp_towrite: m_nzp_out)) != 3'b0)) | x_decodevals[17];
+
    Nbit_reg #(16, 16'h8200) m_pc_reg (.in(x_pc), .out(m_pc), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_insn_reg (.in(x_insn), .out(m_insn), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(18, 18'b0) m_decodevals_reg (.in(x_decodevals), .out(m_decodevals), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_r1val_reg (.in(x_actual_r1val), .out(m_r1val), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_r2val_reg (.in(x_actual_r2val), .out(m_r2val), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_aluout_reg (.in(x_aluout), .out(m_aluout), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'b0) m_pc_plus_one_reg (.in(x_pc_plus_one), .out(m_pc_plus_one), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
 
    //code to memory here 
 
@@ -129,7 +139,7 @@ module lc4_processor
    assign nzp_towrite[0] = $signed(m_rd_write_val) > 0;
 
    wire[15:0] m_rd_write_val;
-   assign m_rd_write_val = m_decodevals[14] ? i_cur_dmem_data : m_aluout;
+   assign m_rd_write_val = m_decodevals[13] ? m_pc_plus_one : (m_decodevals[14] ? i_cur_dmem_data : m_aluout);
 
    assign test_nzp_new_bits  = m_nzp_out;
 
@@ -177,7 +187,7 @@ module lc4_processor
     */
 `ifndef NDEBUG
    always @(posedge gwe) begin
-      $display("%d %h %h", $time, m_insn, x_insn);
+      // $display("%d %h %h %h %h", $time, load_to_use_stall, d_insn[15:9] == 7'b0000111, d_insn, x_decodevals[14]);
       // if (o_dmem_we)
       //   $display("%d STORE %h <= %h", $time, o_dmem_addr, o_dmem_towrite);
 
