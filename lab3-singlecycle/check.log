@@ -308,6 +308,6 @@ Checking module lc4_alu...
 Found and reported 0 problems.
 
 Warnings: 1 unique messages, 1 total
-End of script. Logfile hash: cc2f84ed2f, CPU: user 0.31s system 0.02s, MEM: 44.45 MB peak
+End of script. Logfile hash: cc2f84ed2f, CPU: user 0.33s system 0.00s, MEM: 44.46 MB peak
 Yosys 0.9+3855 (git sha1 54294957, clang 7.0.1 -fPIC -Os)
 Time spent: 56% 2x check (0 sec), 23% 12x read_verilog (0 sec), ...
