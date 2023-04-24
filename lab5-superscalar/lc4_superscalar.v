@@ -75,11 +75,11 @@ module lc4_processor(input wire         clk,             // main clock
    //Nbit_reg #(16, 16'b0) d_insn_reg (.in(take_branch ? 16'b0 : i_cur_insn), .out(d_insn), .clk(clk), .we(!load_to_use_stall), .gwe(gwe), .rst(rst));
    //Nbit_reg #(16, 16'b0) d_pc_plus_one_reg (.in(take_branch ? 16'b0 : pc_plus_one), .out(d_pc_plus_one), .clk(clk), .we(!load_to_use_stall), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'h8200) d_pc_reg_A (.in(ltu_destA ? d_pc_A : (b_stall ? d_pc_B : pc)), .out(d_pc_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) d_insn_reg_A (.in(ltu_destA ? d_insn_A : (b_stall ? d_insn_B : i_cur_insn_A)), .out(d_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) d_insn_reg_A (.in(ltu_destA ? d_insn_A : (b_stall ? d_insn_B : i_cur_insn_A)), .out(d_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) d_pc_plus_one_reg_A (.in(ltu_destA ? d_pc_plus_one_A : (b_stall ? d_pc_plus_one_B : pc_plus_one)), .out(d_pc_plus_one_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
 
    Nbit_reg #(16, 16'h8201) d_pc_reg_B (.in(ltu_destA ? d_pc_B : (b_stall ? pc : pc_plus_one)), .out(d_pc_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) d_insn_reg_B (.in(ltu_destA ? d_insn_B : (b_stall ? i_cur_insn_A : i_cur_insn_B)), .out(d_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) d_insn_reg_B (.in(ltu_destA ? d_insn_B : (b_stall ? i_cur_insn_A : i_cur_insn_B)), .out(d_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) d_pc_plus_one_reg_B (.in(ltu_destA ? d_pc_plus_one_B : (b_stall ? pc_plus_one : pc_plus_two)), .out(d_pc_plus_one_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
 
 
@@ -118,7 +118,7 @@ module lc4_processor(input wire         clk,             // main clock
    
    wire a_to_b_dep;
    assign a_to_b_dep = d_decode_output_A[11] & ((d_decode_output_B[3] & d_decode_output_A[10:8] == d_decode_output_B[2:0]) | 
-                                                         (d_decode_output_B[7] & d_decode_output_A[10:8] == d_decode_output_B[6:4]));
+                                                         (d_decode_output_B[7] & !d_decode_output_B[15] & d_decode_output_A[10:8] == d_decode_output_B[6:4]));
 
    wire ltu_destA;
    assign ltu_destA = ((x_decodevals_A[14] & ((d_decode_output_A[3] & (d_decode_output_A[2:0] == x_decodevals_A[10:8])) | 
@@ -166,14 +166,14 @@ module lc4_processor(input wire         clk,             // main clock
    //Nbit_reg #(16, 16'b0) x_r2val_reg (.in((take_branch | load_to_use_stall) ? 16'b0 : d_r2val_output), .out(x_r2val), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    //Nbit_reg #(16, 16'b0) x_pc_plus_one_reg (.in((take_branch | load_to_use_stall) ? 16'b0 : d_pc_plus_one), .out(x_pc_plus_one), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'h8200) x_pc_reg_A (.in(ltu_destA ? 16'b0 : d_pc_A), .out(x_pc_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) x_insn_reg_A (.in(ltu_destA ? 16'b1 : d_insn_A), .out(x_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) x_insn_reg_A (.in(ltu_destA ? 16'b1 : d_insn_A), .out(x_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(18, 18'b0) x_decodevals_reg_A (.in(ltu_destA ? 18'b0 : d_decode_output_A), .out(x_decodevals_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) x_r1val_reg_A (.in(ltu_destA ? 16'b0 : d_r1val_output_A), .out(x_r1val_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) x_r2val_reg_A (.in(ltu_destA ? 16'b0 : d_r2val_output_A), .out(x_r2val_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) x_pc_plus_one_reg_A (.in(ltu_destA ? 16'b0 : d_pc_plus_one_A), .out(x_pc_plus_one_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
 
    Nbit_reg #(16, 16'h8200) x_pc_reg_B (.in(ltu_destA | b_stall ? 16'b0 : d_pc_B), .out(x_pc_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) x_insn_reg_B (.in(ltu_destA | a_to_b_dep | struct_dep ? (16'h2) : (ltu_destB ? 16'b1 : d_insn_B)), .out(x_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) x_insn_reg_B (.in(ltu_destA | a_to_b_dep | struct_dep ? (16'h2) : (ltu_destB ? 16'b1 : d_insn_B)), .out(x_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(18, 18'b0) x_decodevals_reg_B (.in(ltu_destA | b_stall ? 18'b0: d_decode_output_B), .out(x_decodevals_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) x_r1val_reg_B (.in(ltu_destA | b_stall ? 16'b0 : d_r1val_output_B), .out(x_r1val_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) x_r2val_reg_B (.in(ltu_destA | b_stall ? 16'b0: d_r2val_output_B), .out(x_r2val_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
@@ -231,7 +231,7 @@ module lc4_processor(input wire         clk,             // main clock
    //assign take_branch = (x_decodevals[16] & ((x_insn[11:9] & (m_decodevals[12] ? nzp_towrite: m_nzp_out)) != 3'b0)) | x_decodevals[17];
 
    Nbit_reg #(16, 16'h8200) m_pc_reg_A (.in(x_pc_A), .out(m_pc_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) m_insn_reg_A (.in(x_insn_A), .out(m_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) m_insn_reg_A (.in(x_insn_A), .out(m_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(18, 18'b0) m_decodevals_reg_A (.in(x_decodevals_A), .out(m_decodevals_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_r1val_reg_A (.in(x_actual_r1val_A), .out(m_r1val_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_r2val_reg_A (.in(x_actual_r2val_A), .out(m_r2val_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
@@ -239,7 +239,7 @@ module lc4_processor(input wire         clk,             // main clock
    Nbit_reg #(16, 16'b0) m_pc_plus_one_reg_A (.in(x_pc_plus_one_A), .out(m_pc_plus_one_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
 
    Nbit_reg #(16, 16'h8200) m_pc_reg_B (.in(x_pc_B), .out(m_pc_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) m_insn_reg_B (.in(x_insn_B), .out(m_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) m_insn_reg_B (.in(x_insn_B), .out(m_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(18, 18'b0) m_decodevals_reg_B (.in(x_decodevals_B), .out(m_decodevals_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_r1val_reg_B (.in(x_actual_r1val_B), .out(m_r1val_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) m_r2val_reg_B (.in(x_actual_r2val_B), .out(m_r2val_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
@@ -302,12 +302,12 @@ module lc4_processor(input wire         clk,             // main clock
    wire [15:0] w_dmem_addr;
 
    Nbit_reg #(16, 16'h8200) w_pc_reg_A (.in(m_pc_A), .out(w_pc_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) w_insn_reg_A (.in(m_insn_A), .out(w_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) w_insn_reg_A (.in(m_insn_A), .out(w_insn_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(18, 18'b0) w_decodevals_reg_A (.in(m_decodevals_A), .out(w_decodevals_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) w_rd_writeval_reg_A (.in(m_rd_write_val_A), .out(w_rd_write_val_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(3, 3'b0) w_nzp_out_reg_A (.in(m_nzp_out_A), .out(w_nzp_out_A), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'h8200) w_pc_reg_B (.in(m_pc_B), .out(w_pc_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
-   Nbit_reg #(16, 16'b0) w_insn_reg_B (.in(m_insn_B), .out(w_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
+   Nbit_reg #(16, 16'h3) w_insn_reg_B (.in(m_insn_B), .out(w_insn_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(18, 18'b0) w_decodevals_reg_B (.in(m_decodevals_B), .out(w_decodevals_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(16, 16'b0) w_rd_writeval_reg_B (.in(m_rd_write_val_B), .out(w_rd_write_val_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
    Nbit_reg #(3, 3'b0) w_nzp_out_reg_B (.in(m_nzp_out_B), .out(w_nzp_out_B), .clk(clk), .we(1'b1), .gwe(gwe), .rst(rst));
@@ -318,7 +318,7 @@ module lc4_processor(input wire         clk,             // main clock
    //code for write here (done above with reg file)
    
    assign o_cur_pc = pc;
-   assign test_stall_A = (w_insn_A == 16'b0) ? 2'b10 : (w_insn_A == 16'b1 ? 2'b11 : 2'b00);
+   assign test_stall_A = (w_insn_A == 16'h3) ? 2'b10 : (w_insn_A == 16'b1 ? 2'b11 : 2'b00);
    assign test_cur_pc_A = w_pc_A;
    assign test_cur_insn_A = w_insn_A;
    assign test_regfile_we_A = w_decodevals_A[11];
@@ -326,7 +326,7 @@ module lc4_processor(input wire         clk,             // main clock
    assign test_regfile_data_A = w_rd_write_val_A;
    assign test_nzp_we_A = w_decodevals_A[12];
 
-   assign test_stall_B = (w_insn_B == 16'b0) ? 2'b10 : (w_insn_B == 16'b1 ? 2'b11 : (w_insn_B == 16'h2 ? 2'b01 : 2'b00));
+   assign test_stall_B = (w_insn_B == 16'h3) ? 2'b10 : (w_insn_B == 16'b1 ? 2'b11 : (w_insn_B == 16'h2 ? 2'b01 : 2'b00));
    assign test_cur_pc_B = w_pc_B;
    assign test_cur_insn_B = w_insn_B;
    assign test_regfile_we_B = w_decodevals_B[11];
@@ -352,7 +352,7 @@ module lc4_processor(input wire         clk,             // main clock
     * to conditionally print out information.
     */
    always @(posedge gwe) begin
-      //$display("%d %h %h", $time, w_insn_A, w_insn_B);
+      //$display("%d %h %h %h %h %h", $time, d_pc_A, d_pc_B, d_insn_A, d_insn_B, a_to_b_dep);
       // if (o_dmem_we)
       //   $display("%d STORE %h <= %h", $time, o_dmem_addr, o_dmem_towrite);
 

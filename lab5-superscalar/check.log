@@ -200,12 +200,16 @@ Parameter 1 (\n) = 18
 Parameter 2 (\r) = 18'000000000000000000
 Generating RTLIL representation for module `$paramod\Nbit_reg\n=18\r=18'000000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+
+14.5. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
+Parameter 1 (\n) = 16
+Parameter 2 (\r) = 16'0000000000000011
+Generating RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 
-14.5. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
+14.6. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 Generating RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
@@ -219,8 +223,8 @@ Parameter 1 (\n) = 18
 Parameter 2 (\r) = 18'000000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=18\r=18'000000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
@@ -246,8 +250,8 @@ Parameter 1 (\n) = 18
 Parameter 2 (\r) = 18'000000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=18\r=18'000000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
@@ -267,8 +271,8 @@ Parameter 1 (\n) = 18
 Parameter 2 (\r) = 18'000000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=18\r=18'000000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
@@ -285,8 +289,8 @@ Parameter 1 (\n) = 18
 Parameter 2 (\r) = 18'000000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=18\r=18'000000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
@@ -303,26 +307,26 @@ Parameter 1 (\n) = 18
 Parameter 2 (\r) = 18'000000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=18\r=18'000000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
 Parameter 1 (\n) = 16
 
-14.6. Executing AST frontend in derive mode using pre-parsed AST for module `\lc4_regfile_ss'.
+14.7. Executing AST frontend in derive mode using pre-parsed AST for module `\lc4_regfile_ss'.
 Parameter 1 (\n) = 16
 Generating RTLIL representation for module `$paramod\lc4_regfile_ss\n=16'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'0000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000001
 
-14.7. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
+14.8. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000001
 Generating RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000001'.
@@ -330,8 +334,8 @@ Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'0000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
 Parameter 1 (\n) = 16
-Parameter 2 (\r) = 16'0000000000000000
-Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
+Parameter 2 (\r) = 16'0000000000000011
+Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000011'.
 Parameter 1 (\n) = 16
 Parameter 2 (\r) = 16'1000001000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
@@ -340,7 +344,7 @@ Parameter 2 (\r) = 16'1000001000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'1000001000000000'.
 Parameter 1 (\n) = 16
 
-14.8. Executing AST frontend in derive mode using pre-parsed AST for module `\delay_eight_cycles'.
+14.9. Executing AST frontend in derive mode using pre-parsed AST for module `\delay_eight_cycles'.
 Parameter 1 (\n) = 16
 Generating RTLIL representation for module `$paramod\delay_eight_cycles\n=16'.
 Parameter 1 (\n) = 16
@@ -353,7 +357,7 @@ Parameter 2 (\r) = 16'0000000000000000
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=16'0000000000000000'.
 Parameter 1 (\n) = 1
 
-14.9. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
+14.10. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
 Parameter 1 (\n) = 1
 Generating RTLIL representation for module `$paramod\Nbit_reg\n=1'.
 Parameter 1 (\n) = 1
@@ -372,7 +376,7 @@ Parameter 1 (\n) = 1
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=1'.
 Parameter 1 (\n) = 2
 
-14.10. Executing AST frontend in derive mode using pre-parsed AST for module `\count'.
+14.11. Executing AST frontend in derive mode using pre-parsed AST for module `\count'.
 Parameter 1 (\n) = 2
 Generating RTLIL representation for module `$paramod\count\n=2'.
 Parameter 1 (\n) = 16
@@ -401,7 +405,7 @@ Parameter 2 (\r) = 0
 Found cached RTLIL representation for module `$paramod\Nbit_reg\n=16\r=0'.
 Parameter 1 (\n) = 16
 
-14.11. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
+14.12. Executing AST frontend in derive mode using pre-parsed AST for module `\Nbit_reg'.
 Parameter 1 (\n) = 16
 Generating RTLIL representation for module `$paramod\Nbit_reg\n=16'.
 Parameter 1 (\n) = 16
@@ -430,6 +434,7 @@ Checking module $paramod\delay_eight_cycles\n=16...
 Checking module $paramod\Nbit_reg\n=16\r=16'1000001000000001...
 Checking module $paramod\lc4_regfile_ss\n=16...
 Checking module $paramod\Nbit_reg\n=16\r=16'1000001000000000...
+Checking module $paramod\Nbit_reg\n=16\r=16'0000000000000011...
 Checking module $paramod\Nbit_reg\n=18\r=18'000000000000000000...
 Checking module $paramod\Nbit_reg\n=3\r=3'000...
 Checking module $paramod\Nbit_reg\n=16\r=16'0000000000000000...
@@ -456,6 +461,6 @@ Checking module lc4_alu...
 Found and reported 0 problems.
 
 Warnings: 1 unique messages, 1 total
-End of script. Logfile hash: abd6809b62, CPU: user 0.52s system 0.02s, MEM: 56.39 MB peak
+End of script. Logfile hash: 1568bab20c, CPU: user 0.51s system 0.01s, MEM: 56.41 MB peak
 Yosys 0.9+3855 (git sha1 54294957, clang 7.0.1 -fPIC -Os)
-Time spent: 56% 2x check (0 sec), 22% 1x flatten (0 sec), ...
+Time spent: 60% 2x check (0 sec), 22% 1x flatten (0 sec), ...
